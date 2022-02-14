@@ -14,7 +14,7 @@ struct ContentView: View {
 
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \ToDoEntity.name, ascending: true)],
-        animation: .default)
+     animation: .default)
     private var items: FetchedResults<ToDoEntity>
 
     // MARK: - Body
@@ -23,7 +23,7 @@ struct ContentView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        Text("Item at \(item.entity)")
+                        Text("Some view!")
                     } label: {
                         Text("Test")
                     }
@@ -54,12 +54,7 @@ struct ContentView: View {
             let newItem = ToDoEntity(context: viewContext)
             newItem.name = "Hi"
 
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            test(error: "Problem adding item!")
         }
     }
 
@@ -67,12 +62,16 @@ struct ContentView: View {
         withAnimation {
             offsets.map { items[$0] }.forEach(viewContext.delete)
 
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            test(error: "Problem deleting item!")
+        }
+    }
+    
+    func test(error: String) {
+        do {
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
 }
